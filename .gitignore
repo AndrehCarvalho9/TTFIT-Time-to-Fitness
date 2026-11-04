@@ -1,0 +1,25 @@
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Arquivos temporários Python
+__pycache__/
+*.py[cod]
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# Banco de dados local
+*.db
+*.sqlite
+*.sqlite3
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Configurações locais do VS Code
+.vscode/

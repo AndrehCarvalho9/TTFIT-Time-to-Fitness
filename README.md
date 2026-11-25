@@ -143,6 +143,7 @@ TTFIT/
 │
 ├── .env.example
 ├── index.html
+├── iniciar_api.py
 ├── iniciar_ttfit.py
 └── README.md
 ```
@@ -184,6 +185,8 @@ O script compartilha a base local `backend/ttfit.db` com a API: alimentos import
 As páginas `frontend/login.html` e `frontend/perfil.html` permitem criar conta, entrar, consultar e editar os dados do perfil, sair e excluir a conta. O botão do cabeçalho mostra **Entrar** quando não há sessão e **Perfil** quando o usuário está autenticado. As senhas são armazenadas como hashes PBKDF2; a sessão usa cookie assinado.
 
 Inicie o sistema por `python iniciar_ttfit.py`. O inicializador prepara as dependências e só abre o site depois de confirmar que a API respondeu em `http://127.0.0.1:8000/api/health`. Abrir apenas `frontend/index.html` ou iniciar apenas um servidor estático não inicia a API necessária para login e cadastro.
+
+Se estiver usando o Live Server para o frontend, inicie somente a API em outra janela do terminal com `python iniciar_api.py`. A página do Live Server deve estar em `http://127.0.0.1:5500` para que a origem seja aceita pela API. O processo da API permanece aberto no terminal até Ctrl+C.
 
 Para guardar as contas em MySQL e consultá-las no phpMyAdmin:
 

@@ -58,7 +58,7 @@ def main() -> None:
 
     # Instala as dependencias apenas quando FastAPI ou Uvicorn ainda nao estao instalados.
     check = subprocess.run(
-        [python, "-c", "import fastapi, uvicorn, mysql.connector, dotenv"],
+        [python, "-c", "import fastapi, uvicorn, mysql.connector, dotenv, itsdangerous"],
         cwd=ROOT,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,

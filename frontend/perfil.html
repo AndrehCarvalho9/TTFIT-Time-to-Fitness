@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b0a">
+  <title>Meu perfil | TTFIT — Time to Fitness</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="account-page">
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="TTFIT - página inicial">
+      <img src="assets/ttfit-mark.png" alt="Símbolo TTFIT">
+      <span><b><i>TT</i><em>FIT</em></b><small>TIME TO FITNESS</small></span>
+    </a>
+    <nav aria-label="Navegação principal">
+      <a href="index.html#painel">Painel</a>
+      <a href="index.html#alimentacao">Alimentação</a>
+      <a href="index.html#progresso">Progresso</a>
+    </nav>
+    <a id="auth-link" class="auth-link" href="perfil.html">Perfil</a>
+  </header>
+
+  <main class="account-container profile-container">
+    <section class="profile-heading">
+      <div class="profile-avatar" aria-hidden="true"><span id="profile-initial">T</span></div>
+      <div class="profile-identity">
+        <p class="eyebrow">ÁREA DO USUÁRIO</p>
+        <h1 id="profile-name">Carregando perfil...</h1>
+        <p id="profile-email" class="muted"></p>
+      </div>
+      <button id="logout-button" class="quiet" type="button">Sair da conta</button>
+    </section>
+
+    <section class="profile-grid">
+      <article class="panel profile-summary">
+        <p class="eyebrow">SEU ACOMPANHAMENTO</p>
+        <h2>Dados do perfil</h2>
+        <dl>
+          <div><dt>Idade</dt><dd id="summary-age">Não informado</dd></div>
+          <div><dt>Altura</dt><dd id="summary-height">Não informada</dd></div>
+          <div><dt>Peso</dt><dd id="summary-weight">Não informado</dd></div>
+          <div><dt>Objetivo</dt><dd id="summary-goal">Não informado</dd></div>
+          <div><dt>Membro desde</dt><dd id="summary-created">—</dd></div>
+        </dl>
+      </article>
+
+      <article class="panel profile-edit">
+        <p class="eyebrow">INFORMAÇÕES DA CONTA</p>
+        <h2>Editar perfil</h2>
+        <form id="profile-form">
+          <label for="profile-name-input">Nome completo</label>
+          <input id="profile-name-input" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required>
+          <label for="profile-email-input">E-mail</label>
+          <input id="profile-email-input" name="email" type="email" autocomplete="email" readonly>
+          <div class="profile-fields">
+            <div>
+              <label for="profile-age-input">Idade <small>(anos)</small></label>
+              <input id="profile-age-input" name="age" type="number" min="13" max="120" placeholder="Ex.: 25">
+            </div>
+            <div>
+              <label for="profile-height-input">Altura <small>(cm)</small></label>
+              <input id="profile-height-input" name="height_cm" type="number" min="80" max="250" step="0.1" placeholder="Ex.: 170">
+            </div>
+            <div>
+              <label for="profile-weight-input">Peso <small>(kg)</small></label>
+              <input id="profile-weight-input" name="weight_kg" type="number" min="25" max="350" step="0.1" placeholder="Ex.: 70">
+            </div>
+          </div>
+          <label for="profile-goal-input">Objetivo pessoal</label>
+          <textarea id="profile-goal-input" name="goal" rows="3" maxlength="240" placeholder="Ex.: melhorar meus hábitos alimentares"></textarea>
+          <p class="account-status" id="profile-status" role="status" aria-live="polite"></p>
+          <button class="primary" type="submit">Salvar alterações</button>
+        </form>
+      </article>
+    </section>
+
+    <section class="profile-danger panel" aria-labelledby="delete-account-title">
+      <div><p class="eyebrow">GERENCIAMENTO DA CONTA</p><h2 id="delete-account-title">Excluir conta</h2><p class="muted">Remove seus dados de perfil do banco de dados. Essa ação não pode ser desfeita.</p></div>
+      <button id="delete-account-button" class="danger-button" type="button">Excluir minha conta</button>
+    </section>
+  </main>
+
+  <footer><b>TTFIT</b> <span>TIME TO FITNESS</span> · Sua evolução, no seu ritmo.</footer>
+  <script src="js/auth.js"></script>
+</body>
+</html>

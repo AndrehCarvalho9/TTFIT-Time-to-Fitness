@@ -5,6 +5,8 @@ import os
 import subprocess
 import sys
 import time
+from urllib.error import URLError
+from urllib.request import urlopen
 import webbrowser
 from pathlib import Path
 
@@ -16,6 +18,21 @@ REQUIREMENTS = ROOT / "backend" / "requirements.txt"
 def run_setup_command(command: list[str], description: str) -> None:
     print(f"\n{description}...", flush=True)
     subprocess.run(command, cwd=ROOT, check=True)
+
+
+def wait_for_api(process: subprocess.Popen, timeout: float = 20) -> bool:
+    """Wait until FastAPI responds, including when Uvicorn's reload parent stays alive."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if process.poll() is not None:
+            return False
+        try:
+            with urlopen("http://127.0.0.1:8000/api/health", timeout=1) as response:
+                if response.status == 200:
+                    return True
+        except (OSError, URLError):
+            time.sleep(0.5)
+    return False
 
 
 def main() -> None:
@@ -41,7 +58,7 @@ def main() -> None:
 
     # Instala as dependencias apenas quando FastAPI ou Uvicorn ainda nao estao instalados.
     check = subprocess.run(
-        [python, "-c", "import fastapi, uvicorn"],
+        [python, "-c", "import fastapi, uvicorn, mysql.connector, dotenv"],
         cwd=ROOT,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -63,9 +80,9 @@ def main() -> None:
             cwd=ROOT,
         )
         children.append(backend)
-        time.sleep(1.5)
-        if backend.poll() is not None:
-            print("A API nao iniciou. A porta 8000 pode estar ocupada ou ocorreu um erro acima.")
+        if not wait_for_api(backend):
+            print("A API nao respondeu na porta 8000.")
+            print("Confira a conexao do MySQL e a mensagem de erro exibida acima.")
             input("Pressione Enter para sair...")
             return
 

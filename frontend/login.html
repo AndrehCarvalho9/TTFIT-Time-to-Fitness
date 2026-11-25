@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b0a">
+  <title>Entrar | TTFIT — Time to Fitness</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="account-page">
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="TTFIT - página inicial">
+      <img src="assets/ttfit-mark.png" alt="Símbolo TTFIT">
+      <span><b><i>TT</i><em>FIT</em></b><small>TIME TO FITNESS</small></span>
+    </a>
+    <nav aria-label="Navegação principal">
+      <a href="index.html#painel">Painel</a>
+      <a href="index.html#alimentacao">Alimentação</a>
+      <a href="index.html#progresso">Progresso</a>
+    </nav>
+    <a id="auth-link" class="auth-link" href="login.html">Entrar</a>
+  </header>
+
+  <main class="account-container">
+    <section class="account-intro">
+      <p class="eyebrow">SUA JORNADA COMEÇA AQUI</p>
+      <h1>SEU RITMO.<br>SUA <span>EVOLUÇÃO.</span></h1>
+      <p>Entre para acompanhar sua alimentação e manter seu diário nutricional em um só lugar.</p>
+    </section>
+
+    <section class="account-card" aria-label="Acesso à conta TTFIT">
+      <div class="account-tabs" role="tablist" aria-label="Acesso ou cadastro">
+        <button class="account-tab active" id="tab-login" type="button" role="tab" aria-selected="true" aria-controls="panel-login">Entrar</button>
+        <button class="account-tab" id="tab-register" type="button" role="tab" aria-selected="false" aria-controls="panel-register">Criar conta</button>
+      </div>
+
+      <div class="account-panel" id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+        <h2>Bem-vindo de volta</h2>
+        <p class="muted">Use seu e-mail e senha para continuar.</p>
+        <form id="login-form">
+          <label for="login-email">E-mail</label>
+          <input id="login-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+          <label for="login-password">Senha</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+          <p class="account-status" id="login-status" role="status" aria-live="polite"></p>
+          <button class="primary full" type="submit">Entrar na minha conta</button>
+        </form>
+      </div>
+
+      <div class="account-panel" id="panel-register" role="tabpanel" aria-labelledby="tab-register" hidden>
+        <h2>Crie sua conta</h2>
+        <p class="muted">Seus dados ajudam a personalizar seu acompanhamento.</p>
+        <form id="register-form">
+          <label for="register-name">Nome completo</label>
+          <input id="register-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required>
+          <label for="register-email">E-mail</label>
+          <input id="register-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+          <label for="register-password">Senha <small>(mínimo de 8 caracteres)</small></label>
+          <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+          <label for="register-confirm">Confirme a senha</label>
+          <input id="register-confirm" name="confirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+          <p class="account-status" id="register-status" role="status" aria-live="polite"></p>
+          <button class="primary full" type="submit">Criar minha conta</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer><b>TTFIT</b> <span>TIME TO FITNESS</span> · Sua evolução, no seu ritmo.</footer>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -50,7 +50,7 @@ Pessoas interessadas em acompanhar sua alimentação, monitorar o consumo de cal
 - Interface responsiva para diferentes tamanhos de tela.
 - Navegação simples e intuitiva.
 - Organização do código em arquivos e módulos.
-- Armazenamento dos registros em banco de dados SQLite.
+- Armazenamento local dos registros nutricionais em SQLite e suporte configurável a MySQL para contas e perfis.
 - Comunicação entre frontend e backend por meio de API.
 - Utilização de tecnologias acessíveis e adequadas ao desenvolvimento acadêmico.
 
@@ -84,6 +84,7 @@ A interface apresenta:
 | Python | Desenvolvimento do backend |
 | FastAPI | Construção da API |
 | SQLite | Armazenamento dos dados |
+| MySQL | Armazenamento opcional de contas e perfis para consulta no phpMyAdmin |
 | Chart.js | Geração de gráficos |
 | Visual Studio Code | Ambiente de desenvolvimento |
 | Git e GitHub | Controle de versão e hospedagem do código |
@@ -104,8 +105,8 @@ O desenvolvimento está organizado em etapas:
 
 - Os valores nutricionais atualmente cadastrados são demonstrativos e precisam ser substituídos por informações de uma fonte confiável.
 - O reconhecimento de alimentos por imagem ainda não foi implementado.
-- O protótipo utiliza banco de dados SQLite local.
-- A aplicação ainda não possui autenticação e gerenciamento de múltiplos usuários.
+- O diário alimentar continua no SQLite local; contas e perfis usam MySQL quando a conexão é configurada.
+- A conexão MySQL depende de credenciais próprias do banco e de o banco selecionado já existir.
 - A disponibilidade da aplicação depende da execução local do frontend e do backend.
 
 ## 12. Documentação
@@ -127,14 +128,21 @@ TTFIT/
 │   │   └── style.css
 │   │
 │   ├── js/
-│   │   └── app.js
+│   │   ├── app.js
+│   │   └── auth.js
 │   │
-│   └── index.html
+│   ├── index.html
+│   ├── login.html
+│   └── perfil.html
 │
 ├── backend/
+│   ├── auth_store.py
+│   ├── mysql_schema.sql
 │   ├── main.py
 │   └── requirements.txt
 │
+├── .env.example
+├── index.html
 ├── iniciar_ttfit.py
 └── README.md
 ```
@@ -148,3 +156,40 @@ O banco de dados `ttfit.db` é criado automaticamente pelo backend durante a exe
 O TTFIT possui um protótipo com interface web, API em Python e banco de dados SQLite. As funcionalidades iniciais de registro alimentar e acompanhamento nutricional estão implementadas.
 
 As próximas etapas incluem a ampliação do cadastro de alimentos, a integração com fontes nutricionais confiáveis, o acompanhamento de atividades físicas, a configuração de metas e o reconhecimento de alimentos por imagem.
+
+## Ferramentas de dados em Python (Linguagem de Programacao I)
+
+O script `backend/data_tools.py` integra leitura e cadastro de alimentos em CSV/JSON ao banco SQLite usado pelo TTFIT. Ele tambem pesquisa alimentos, calcula totais nutricionais do diario e exporta o catalogo ou o diario em CSV/JSON. As funcoes podem ser importadas por outros modulos Python; a interface de linha de comando permite demonstrar cada operacao.
+
+Execute os comandos na pasta principal do projeto, com as dependencias do backend instaladas:
+
+```text
+python backend/data_tools.py list-foods
+python backend/data_tools.py search arroz
+python backend/data_tools.py add-food "Batata doce" --calorias 86 --proteina 1.6 --carboidratos 20.1 --gordura 0.1
+python backend/data_tools.py import-foods alimentos.json
+python backend/data_tools.py import-foods alimentos.csv
+python backend/data_tools.py summary
+python backend/data_tools.py summary --date 2026-11-25
+python backend/data_tools.py export-foods alimentos-exportados.json
+python backend/data_tools.py export-entries diario.csv
+```
+
+Os arquivos de entrada devem conter alimentos com os campos `name`, `calories_100g`, `protein_100g`, `carbs_100g` e `fat_100g`. O JSON pode ser uma lista de objetos ou um objeto com a propriedade `foods`. O CSV deve usar esses mesmos nomes como cabecalho. Valores devem ser nao negativos; nomes repetidos ou registros invalidos cancelam a importacao inteira. Exporte para uma pasta fora do repositorio quando nao quiser adicionar arquivos de dados ao projeto.
+
+O script compartilha a base local `backend/ttfit.db` com a API: alimentos importados ficam disponíveis na interface, e os comandos `summary` e `export-entries` processam os mesmos registros feitos pelo site.
+
+## Contas, login e perfil
+
+As páginas `frontend/login.html` e `frontend/perfil.html` permitem criar conta, entrar, consultar e editar os dados do perfil, sair e excluir a conta. O botão do cabeçalho mostra **Entrar** quando não há sessão e **Perfil** quando o usuário está autenticado. As senhas são armazenadas como hashes PBKDF2; a sessão usa cookie assinado.
+
+Inicie o sistema por `python iniciar_ttfit.py`. O inicializador prepara as dependências e só abre o site depois de confirmar que a API respondeu em `http://127.0.0.1:8000/api/health`. Abrir apenas `frontend/index.html` ou iniciar apenas um servidor estático não inicia a API necessária para login e cadastro.
+
+Para guardar as contas em MySQL e consultá-las no phpMyAdmin:
+
+1. Crie/seleciona um banco de dados no phpMyAdmin com o usuário MySQL da aplicação.
+2. Copie `.env.example` para `.env` e preencha `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD` e `MYSQL_DATABASE` com os parâmetros de conexão MySQL (não os do login do painel).
+3. Defina `TTFIT_SESSION_SECRET` com um segredo aleatório. Em hospedagem HTTPS, defina `TTFIT_HTTPS_ONLY=true`.
+4. Inicie o TTFIT. O backend cria a tabela `g01_users` automaticamente; alternativamente, execute `backend/mysql_schema.sql` no banco selecionado.
+
+Sem as variáveis MySQL, as contas ficam no SQLite local para desenvolvimento. O diário de alimentação continua no SQLite nas duas configurações. A conta inclui nome/e-mail e os campos opcionais idade, altura, peso e objetivo. O perfil não armazena senha em texto puro.
